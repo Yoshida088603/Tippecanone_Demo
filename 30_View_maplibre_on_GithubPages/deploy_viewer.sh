@@ -26,13 +26,14 @@ CENTER_LAT=35.675
 INITIAL_ZOOM=13
 
 if [[ -f "$META_FGB" ]]; then
-  read -r CENTER_LON CENTER_LAT INITIAL_ZOOM < <(
-    python3 - "$META_FGB" <<'PY'
+  read -r CENTER_LON CENTER_LAT INITIAL_ZOOM TOTAL_FEATURES PMTILES_MAX_ZOOM < <(
+    python3 - "$META_FGB" "$SRC_PMTILES" <<'PY'
 import json
 import sys
 from pathlib import Path
 
 meta = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+pmtiles_path = Path(sys.argv[2])
 center = meta.get("bbox_center", [139.78, 35.675])
 extent = meta.get("extent", {})
 lon_span = abs(extent.get("maxx", 139.82) - extent.get("minx", 139.74))
@@ -44,9 +45,18 @@ elif span < 0.05:
     zoom = 13
 else:
     zoom = 12
-print(center[0], center[1], zoom)
+
+total_features = meta.get("feature_count", 0)
+with pmtiles_path.open("rb") as fh:
+    header = fh.read(127)
+max_zoom = header[101] if len(header) > 101 else 14
+
+print(center[0], center[1], zoom, total_features, max_zoom)
 PY
   )
+else
+  TOTAL_FEATURES=0
+  PMTILES_MAX_ZOOM=14
 fi
 
 cp "$SRC_PMTILES" "$DEST_DIR/13102.pmtiles"
@@ -54,6 +64,8 @@ cp "$SRC_PMTILES" "$DEST_DIR/13102.pmtiles"
 sed -e "s/__CENTER_LON__/${CENTER_LON}/g" \
     -e "s/__CENTER_LAT__/${CENTER_LAT}/g" \
     -e "s/__INITIAL_ZOOM__/${INITIAL_ZOOM}/g" \
+    -e "s/__TOTAL_FEATURES__/${TOTAL_FEATURES}/g" \
+    -e "s/__PMTILES_MAX_ZOOM__/${PMTILES_MAX_ZOOM}/g" \
     "$TEMPLATE" > "$OUTPUT"
 
 # GitHub Pages (/docs)

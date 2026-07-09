@@ -11,12 +11,99 @@
       position: absolute;
       top: 12px;
       left: 12px;
-      z-index: 1;
+      z-index: 2;
       background: rgba(255, 255, 255, 0.92);
       padding: 8px 12px;
       border-radius: 6px;
       font: 13px/1.4 system-ui, sans-serif;
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+      pointer-events: none;
+    }
+    .stats-panel {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.94);
+      padding: 10px 12px;
+      border-radius: 6px;
+      font: 12px/1.5 ui-monospace, 'Cascadia Code', monospace;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+      min-width: 240px;
+      max-width: 320px;
+    }
+    .stats-panel h3 {
+      margin: 0 0 8px;
+      font: 600 13px/1.2 system-ui, sans-serif;
+      color: #1d3557;
+    }
+    .stats-panel dl {
+      margin: 0;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 2px 10px;
+    }
+    .stats-panel dt { color: #666; }
+    .stats-panel dd { margin: 0; text-align: right; color: #111; }
+    .attr-panel {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 3;
+      width: min(360px, calc(100vw - 24px));
+      max-height: calc(100vh - 24px);
+      overflow: auto;
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+      font: 13px/1.4 system-ui, sans-serif;
+    }
+    .attr-panel.hidden { display: none; }
+    .attr-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-bottom: 1px solid #e5e5e5;
+      background: #f8f9fa;
+      border-radius: 8px 8px 0 0;
+      position: sticky;
+      top: 0;
+    }
+    .attr-panel-header h3 { margin: 0; font-size: 14px; }
+    .attr-close {
+      border: none;
+      background: transparent;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      color: #666;
+      padding: 0 4px;
+    }
+    .attr-close:hover { color: #111; }
+    .attr-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .attr-table th,
+    .attr-table td {
+      padding: 6px 12px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+      vertical-align: top;
+      word-break: break-all;
+    }
+    .attr-table th {
+      width: 38%;
+      color: #555;
+      font-weight: 600;
+      background: #fafafa;
+    }
+    .attr-table tr:last-child th,
+    .attr-table tr:last-child td { border-bottom: none; }
+    .attr-empty {
+      padding: 16px 12px;
+      color: #666;
     }
   </style>
 </head>
@@ -24,18 +111,57 @@
   <div id="map"></div>
   <div class="map-overlay">中央区（13102）土地境界 / PMTiles POC</div>
 
+  <div id="stats-panel" class="stats-panel">
+    <h3>表示最適化</h3>
+    <dl>
+      <dt>ズーム</dt><dd id="stat-zoom">-</dd>
+      <dt>タイル Z</dt><dd id="stat-tile-z">-</dd>
+      <dt>表示ポリゴン数</dt><dd id="stat-visible-polygons">-</dd>
+      <dt>データ総数</dt><dd id="stat-total-polygons">-</dd>
+      <dt>表示ラベル数</dt><dd id="stat-visible-labels">-</dd>
+      <dt>ラベル LOD</dt><dd id="stat-label-lod">-</dd>
+      <dt>PMTiles 最大Z</dt><dd id="stat-pmtiles-maxzoom">-</dd>
+      <dt>ソース overzoom</dt><dd id="stat-overzoom">-</dd>
+      <dt>選択</dt><dd id="stat-selected">なし</dd>
+    </dl>
+  </div>
+
+  <div id="attr-panel" class="attr-panel hidden">
+    <div class="attr-panel-header">
+      <h3 id="attr-title">属性</h3>
+      <button id="attr-close" class="attr-close" title="閉じる">×</button>
+    </div>
+    <table id="attr-table" class="attr-table"></table>
+  </div>
+
   <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
   <script src="https://unpkg.com/pmtiles@3.0.6/dist/pmtiles.js"></script>
   <script>
     const CENTER_LON = __CENTER_LON__;
     const CENTER_LAT = __CENTER_LAT__;
     const INITIAL_ZOOM = __INITIAL_ZOOM__;
+    const TOTAL_FEATURES = __TOTAL_FEATURES__;
+    const PMTILES_MAX_ZOOM = __PMTILES_MAX_ZOOM__;
+    const LABEL_MIN_ZOOM = 15;
+
+    const PARCEL_LAYERS = {
+      fill: 'parcels-fill',
+      line: 'parcels-line',
+      label: 'parcels-label',
+      highlight: 'parcels-highlight'
+    };
+
+    const ATTR_PRIORITY = [
+      '地番', '筆ID', '大字名', '丁目名', '小字名', '市区町村名',
+      '座標系', '精度区分', '地図名', '市区町村コード'
+    ];
 
     const protocol = new pmtiles.Protocol();
     maplibregl.addProtocol('pmtiles', protocol.tile);
 
     const map = new maplibregl.Map({
       container: 'map',
+      localIdeographFontFamily: "'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif",
       style: {
         version: 8,
         sources: {
@@ -58,23 +184,63 @@
             source: 'osm'
           },
           {
-            id: 'parcels-fill',
+            id: PARCEL_LAYERS.fill,
             type: 'fill',
             source: 'parcels',
             'source-layer': 'parcels',
             paint: {
               'fill-color': '#e85d04',
-              'fill-opacity': 0.35
+              'fill-opacity': [
+                'case',
+                ['boolean', ['feature-state', 'selected'], false],
+                0.55,
+                0.35
+              ]
             }
           },
           {
-            id: 'parcels-line',
+            id: PARCEL_LAYERS.highlight,
+            type: 'line',
+            source: 'parcels',
+            'source-layer': 'parcels',
+            paint: {
+              'line-color': '#0057b8',
+              'line-width': 3
+            },
+            filter: ['==', ['id'], -1]
+          },
+          {
+            id: PARCEL_LAYERS.line,
             type: 'line',
             source: 'parcels',
             'source-layer': 'parcels',
             paint: {
               'line-color': '#9d0208',
               'line-width': 1
+            }
+          },
+          {
+            id: PARCEL_LAYERS.label,
+            type: 'symbol',
+            source: 'parcels',
+            'source-layer': 'parcels',
+            minzoom: LABEL_MIN_ZOOM,
+            layout: {
+              'text-field': ['coalesce', ['get', '地番'], ''],
+              'text-size': [
+                'interpolate', ['linear'], ['zoom'],
+                15, 10,
+                18, 13
+              ],
+              'text-anchor': 'center',
+              'text-allow-overlap': false,
+              'text-ignore-placement': false,
+              'text-padding': 2
+            },
+            paint: {
+              'text-color': '#1d3557',
+              'text-halo-color': '#ffffff',
+              'text-halo-width': 1.5
             }
           }
         ]
@@ -83,7 +249,149 @@
       zoom: INITIAL_ZOOM
     });
 
+    let selectedFeatureId = null;
+
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    }
+
+    function formatZoom(value) {
+      return Number(value).toFixed(2);
+    }
+
+    function countRendered(layerId) {
+      return map.queryRenderedFeatures({ layers: [layerId] }).length;
+    }
+
+    function updateStats() {
+      const zoom = map.getZoom();
+      const tileZ = Math.floor(zoom);
+      const visiblePolygons = countRendered(PARCEL_LAYERS.fill);
+      const labelsActive = zoom >= LABEL_MIN_ZOOM;
+      const visibleLabels = labelsActive ? countRendered(PARCEL_LAYERS.label) : 0;
+      const overzoom = Math.max(0, tileZ - PMTILES_MAX_ZOOM);
+
+      setText('stat-zoom', formatZoom(zoom));
+      setText('stat-tile-z', String(tileZ));
+      setText('stat-visible-polygons', String(visiblePolygons));
+      setText('stat-total-polygons', String(TOTAL_FEATURES));
+      setText('stat-visible-labels', labelsActive ? String(visibleLabels) : `0 (z<${LABEL_MIN_ZOOM})`);
+      setText('stat-label-lod', `地番 z≥${LABEL_MIN_ZOOM}`);
+      setText('stat-pmtiles-maxzoom', `z${PMTILES_MAX_ZOOM}`);
+      setText('stat-overzoom', overzoom > 0 ? `+${overzoom}` : '0');
+      setText('stat-selected', selectedFeatureId != null ? `id=${selectedFeatureId}` : 'なし');
+    }
+
+    function sortAttributeEntries(properties) {
+      const entries = Object.entries(properties || {});
+      return entries.sort((a, b) => {
+        const ai = ATTR_PRIORITY.indexOf(a[0]);
+        const bi = ATTR_PRIORITY.indexOf(b[0]);
+        if (ai !== -1 || bi !== -1) {
+          return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+        }
+        return a[0].localeCompare(b[0], 'ja');
+      });
+    }
+
+    function showAttributePanel(feature) {
+      const panel = document.getElementById('attr-panel');
+      const table = document.getElementById('attr-table');
+      const title = document.getElementById('attr-title');
+      const props = feature.properties || {};
+      const chiban = props['地番'] || '(地番なし)';
+
+      title.textContent = `属性 — 地番 ${chiban}`;
+      table.innerHTML = '';
+
+      const rows = sortAttributeEntries(props);
+      if (rows.length === 0) {
+        table.innerHTML = '<tr><td class="attr-empty" colspan="2">属性がありません</td></tr>';
+      } else {
+        for (const [key, value] of rows) {
+          const tr = document.createElement('tr');
+          const th = document.createElement('th');
+          const td = document.createElement('td');
+          th.textContent = key;
+          td.textContent = value == null || value === '' ? '(空)' : String(value);
+          tr.appendChild(th);
+          tr.appendChild(td);
+          table.appendChild(tr);
+        }
+      }
+
+      panel.classList.remove('hidden');
+    }
+
+    function hideAttributePanel() {
+      document.getElementById('attr-panel').classList.add('hidden');
+    }
+
+    function clearSelection() {
+      if (selectedFeatureId != null) {
+        map.setFeatureState(
+          { source: 'parcels', sourceLayer: 'parcels', id: selectedFeatureId },
+          { selected: false }
+        );
+      }
+      selectedFeatureId = null;
+      map.setFilter(PARCEL_LAYERS.highlight, ['==', ['id'], -1]);
+      setText('stat-selected', 'なし');
+    }
+
+    function selectFeature(feature) {
+      clearSelection();
+      if (feature.id == null) return;
+
+      selectedFeatureId = feature.id;
+      map.setFeatureState(
+        { source: 'parcels', sourceLayer: 'parcels', id: selectedFeatureId },
+        { selected: true }
+      );
+      map.setFilter(PARCEL_LAYERS.highlight, ['==', ['id'], selectedFeatureId]);
+      showAttributePanel(feature);
+      updateStats();
+    }
+
+    function onParcelClick(event) {
+      const features = map.queryRenderedFeatures(event.point, { layers: [PARCEL_LAYERS.fill] });
+      if (!features.length) {
+        clearSelection();
+        hideAttributePanel();
+        updateStats();
+        return;
+      }
+      selectFeature(features[0]);
+    }
+
     map.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+    map.on('load', () => {
+      setText('stat-total-polygons', String(TOTAL_FEATURES));
+      updateStats();
+    });
+
+    map.on('moveend', updateStats);
+    map.on('zoomend', updateStats);
+    map.on('sourcedata', (e) => {
+      if (e.sourceId === 'parcels' && e.isSourceLoaded) updateStats();
+    });
+
+    map.on('click', onParcelClick);
+
+    map.on('mouseenter', PARCEL_LAYERS.fill, () => {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', PARCEL_LAYERS.fill, () => {
+      map.getCanvas().style.cursor = '';
+    });
+
+    document.getElementById('attr-close').addEventListener('click', () => {
+      clearSelection();
+      hideAttributePanel();
+      updateStats();
+    });
   </script>
 </body>
 </html>
