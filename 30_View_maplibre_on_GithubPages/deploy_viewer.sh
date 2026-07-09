@@ -56,9 +56,17 @@ sed -e "s/__CENTER_LON__/${CENTER_LON}/g" \
     -e "s/__INITIAL_ZOOM__/${INITIAL_ZOOM}/g" \
     "$TEMPLATE" > "$OUTPUT"
 
+# GitHub Pages (/docs)
+DOCS_DIR="$ROOT/docs"
+DOCS_DATA="$DOCS_DIR/data"
+mkdir -p "$DOCS_DATA"
+cp "$OUTPUT" "$DOCS_DIR/index.html"
+cp "$SRC_PMTILES" "$DOCS_DATA/13102.pmtiles"
+
 {
   echo "=== deploy_viewer.sh $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
   echo "copied $SRC_PMTILES -> $DEST_DIR/13102.pmtiles"
+  echo "copied viewer -> $DOCS_DIR/ (GitHub Pages)"
   echo "center=[$CENTER_LON, $CENTER_LAT] zoom=$INITIAL_ZOOM"
   echo "wrote $OUTPUT"
 } | tee -a "$LOG"
