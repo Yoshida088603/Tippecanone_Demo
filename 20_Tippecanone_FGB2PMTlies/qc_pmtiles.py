@@ -9,7 +9,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PMTILES = ROOT / "90_output_data" / "pmtiles" / "13102.pmtiles"
+DECISION = ROOT / "90_output_data" / "qc" / "crs_decision.json"
+PMTILES = ROOT / "90_output_data" / "pmtiles" / "tokyo23.pmtiles"
 OUT = ROOT / "90_output_data" / "qc" / "meta_pmtiles.json"
 
 
@@ -29,11 +30,17 @@ def read_pmtiles_header(path: Path) -> dict:
 
 
 def main() -> int:
-    if not PMTILES.exists():
-        print(f"ERROR: PMTiles not found: {PMTILES}", file=sys.stderr)
+    if DECISION.exists():
+        decision = json.loads(DECISION.read_text(encoding="utf-8"))
+        pmtiles = ROOT / decision.get("output_pmtiles", PMTILES.relative_to(ROOT))
+    else:
+        pmtiles = PMTILES
+
+    if not pmtiles.exists():
+        print(f"ERROR: PMTiles not found: {pmtiles}", file=sys.stderr)
         return 1
 
-    size = PMTILES.stat().st_size
+    size = pmtiles.stat().st_size
     errors: list[str] = []
 
     if size <= 0:
@@ -41,7 +48,7 @@ def main() -> int:
 
     header_info: dict | None = None
     try:
-        header_info = read_pmtiles_header(PMTILES)
+        header_info = read_pmtiles_header(pmtiles)
         if header_info["magic"] != "PMTiles":
             errors.append(f"unexpected magic: {header_info['magic']!r}")
         if header_info["version"] != 3:
@@ -52,7 +59,7 @@ def main() -> int:
     passed = size > 0 and not errors
 
     meta = {
-        "output": str(PMTILES.relative_to(ROOT)),
+        "output": str(pmtiles.relative_to(ROOT)),
         "size_bytes": size,
         "header": header_info,
         "passed": passed,

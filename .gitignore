@@ -4,3 +4,5 @@ __pycache__/
 .DS_Store
 Thumbs.db
 *.log
+90_output_data/fgb/parts/
+90_output_data/fgb/*.fgb

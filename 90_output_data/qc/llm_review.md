@@ -1,7 +1,7 @@
 # LLM self-review (QC)
 
-1. 入力 29249 件、出力 1036 件（除外 28213）。
-2. CRS 方針 `filter_9系_only`: 宣言 EPSG:4326 だが coord_unit=metre_suspect。
-3. 変換後 bbox lon[139.767239165, 139.788842465] lat[35.648984336, 35.685438194] は中央区想定内=True。
-4. PMTiles サイズ 211780 bytes、ヘッダ検証済み。
-5. Viewer は相対パス `data/13102.pmtiles` で読込。GitHub Pages デプロイは任意。
+1. 入力 23 区・2968919 件、出力 154440 件（除外 2814479）。
+2. 区ごと CRS 自動判定、合計期待出力 154440 件。
+3. 変換後 bbox lon[139.569180813, 139.911137039] lat[35.564878479, 35.815088586] は東京23区想定内=True。
+4. PMTiles サイズ 11139045 bytes、ヘッダ検証済み。
+5. Viewer は単一 PMTiles `tokyo23.pmtiles` で23区を同一地図表示。

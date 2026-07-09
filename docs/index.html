@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>中央区 土地境界 — Tippecanoe POC</title>
+  <title>東京23区 土地境界 — Tippecanoe POC</title>
   <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
   <style>
     html, body, #map { margin: 0; padding: 0; width: 100%; height: 100%; }
@@ -109,7 +109,7 @@
 </head>
 <body>
   <div id="map"></div>
-  <div class="map-overlay">中央区（13102）土地境界 / PMTiles POC</div>
+  <div class="map-overlay">東京23区 土地境界 / PMTiles POC</div>
 
   <div id="stats-panel" class="stats-panel">
     <h3>表示最適化</h3>
@@ -117,6 +117,7 @@
       <dt>ズーム</dt><dd id="stat-zoom">-</dd>
       <dt>タイル Z</dt><dd id="stat-tile-z">-</dd>
       <dt>表示ポリゴン数</dt><dd id="stat-visible-polygons">-</dd>
+      <dt>区数</dt><dd id="stat-ward-count">-</dd>
       <dt>データ総数</dt><dd id="stat-total-polygons">-</dd>
       <dt>表示ラベル数</dt><dd id="stat-visible-labels">-</dd>
       <dt>ラベル LOD</dt><dd id="stat-label-lod">-</dd>
@@ -137,11 +138,13 @@
   <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
   <script src="https://unpkg.com/pmtiles@3.0.6/dist/pmtiles.js"></script>
   <script>
-    const CENTER_LON = 139.778041;
-    const CENTER_LAT = 35.667211;
-    const INITIAL_ZOOM = 13;
-    const TOTAL_FEATURES = 1036;
-    const PMTILES_MAX_ZOOM = 14;
+    const CENTER_LON = 139.740159;
+    const CENTER_LAT = 35.689984;
+    const INITIAL_ZOOM = 10;
+    const PMTILES_FILE = 'tokyo23.pmtiles';
+    const TOTAL_FEATURES = 154440;
+    const WARD_COUNT = 23;
+    const PMTILES_MAX_ZOOM = 13;
     const LABEL_MIN_ZOOM = 15;
 
     const PARCEL_LAYERS = {
@@ -152,7 +155,7 @@
     };
 
     const ATTR_PRIORITY = [
-      '地番', '筆ID', '大字名', '丁目名', '小字名', '市区町村名',
+      '地番', '市区町村名', '筆ID', '大字名', '丁目名', '小字名',
       '座標系', '精度区分', '地図名', '市区町村コード'
     ];
 
@@ -173,8 +176,8 @@
           },
           parcels: {
             type: 'vector',
-            url: 'pmtiles://data/13102.pmtiles',
-            attribution: '土地境界（中央区）'
+            url: 'pmtiles://data/' + PMTILES_FILE,
+            attribution: '土地境界（東京23区）'
           }
         },
         layers: [
@@ -275,6 +278,7 @@
       setText('stat-zoom', formatZoom(zoom));
       setText('stat-tile-z', String(tileZ));
       setText('stat-visible-polygons', String(visiblePolygons));
+      setText('stat-ward-count', String(WARD_COUNT));
       setText('stat-total-polygons', String(TOTAL_FEATURES));
       setText('stat-visible-labels', labelsActive ? String(visibleLabels) : `0 (z<${LABEL_MIN_ZOOM})`);
       setText('stat-label-lod', `地番 z≥${LABEL_MIN_ZOOM}`);

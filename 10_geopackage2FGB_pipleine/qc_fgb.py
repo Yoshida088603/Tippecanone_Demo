@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""QC converted FGB: feature count, EPSG:4326 bbox validation."""
+"""QC merged FGB: feature count, EPSG:4326 bbox validation."""
 
 from __future__ import annotations
 
@@ -10,13 +10,14 @@ from pathlib import Path
 import pyogrio
 
 ROOT = Path(__file__).resolve().parents[1]
-FGB = ROOT / "90_output_data" / "fgb" / "13102.fgb"
 META_IN = ROOT / "90_output_data" / "qc" / "meta_in.json"
+DECISION = ROOT / "90_output_data" / "qc" / "crs_decision.json"
 OUT = ROOT / "90_output_data" / "qc" / "meta_fgb.json"
 LOG = ROOT / "90_output_data" / "logs" / "qc_fgb.log"
 
-LON_MIN, LON_MAX = 139.74, 139.82
-LAT_MIN, LAT_MAX = 35.64, 35.71
+# Tokyo 23 wards approximate bounds (EPSG:4326)
+LON_MIN, LON_MAX = 139.55, 139.92
+LAT_MIN, LAT_MAX = 35.52, 35.85
 
 
 def layer_extent_from_bounds(bounds) -> dict:
@@ -36,7 +37,7 @@ def layer_extent_from_bounds(bounds) -> dict:
     }
 
 
-def bbox_within_chuo(extent: dict) -> tuple[bool, list[str]]:
+def bbox_within_tokyo23(extent: dict) -> tuple[bool, list[str]]:
     errors: list[str] = []
     if extent["minx"] < LON_MIN or extent["maxx"] > LON_MAX:
         errors.append(
@@ -52,12 +53,17 @@ def bbox_within_chuo(extent: dict) -> tuple[bool, list[str]]:
 
 
 def main() -> int:
-    if not FGB.exists():
-        print(f"ERROR: FGB not found: {FGB}", file=sys.stderr)
+    decision = {}
+    if DECISION.exists():
+        decision = json.loads(DECISION.read_text(encoding="utf-8"))
+    fgb = ROOT / decision.get("output_fgb", "90_output_data/fgb/tokyo23.fgb")
+
+    if not fgb.exists():
+        print(f"ERROR: FGB not found: {fgb}", file=sys.stderr)
         return 1
 
-    info = pyogrio.read_info(FGB, layer="parcels")
-    bounds = pyogrio.read_bounds(FGB, layer="parcels")
+    info = pyogrio.read_info(fgb, layer="parcels")
+    bounds = pyogrio.read_bounds(fgb, layer="parcels")
     extent = layer_extent_from_bounds(bounds)
 
     feature_count = int(info.get("features", 0))
@@ -70,22 +76,24 @@ def main() -> int:
         round((extent["miny"] + extent["maxy"]) / 2, 6),
     ]
 
-    ok_extent, extent_errors = bbox_within_chuo(extent)
+    ok_extent, extent_errors = bbox_within_tokyo23(extent)
     passed = feature_count > 0 and ok_extent
 
     meta = {
-        "output": str(FGB.relative_to(ROOT)),
+        "output": str(fgb.relative_to(ROOT)),
         "layer": "parcels",
         "crs": str(info.get("crs")),
         "feature_count": feature_count,
         "input_feature_count": input_count,
         "excluded_count": max(0, input_count - feature_count),
+        "file_count": decision.get("file_count"),
         "extent": extent,
         "bbox_center": bbox_center,
         "bbox_valid": ok_extent,
         "bbox_expected": {
             "lon": [LON_MIN, LON_MAX],
             "lat": [LAT_MIN, LAT_MAX],
+            "label": "Tokyo 23 wards",
         },
         "passed": passed,
         "errors": extent_errors,

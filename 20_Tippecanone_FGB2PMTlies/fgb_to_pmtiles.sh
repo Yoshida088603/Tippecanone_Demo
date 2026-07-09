@@ -2,9 +2,15 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-FGB="$ROOT/90_output_data/fgb/13102.fgb"
-OUT="$ROOT/90_output_data/pmtiles/13102.pmtiles"
+DECISION="$ROOT/90_output_data/qc/crs_decision.json"
+FGB="$ROOT/90_output_data/fgb/tokyo23.fgb"
+OUT="$ROOT/90_output_data/pmtiles/tokyo23.pmtiles"
 LOG="$ROOT/90_output_data/logs/tippecanoe.log"
+
+if [[ -f "$DECISION" ]]; then
+  FGB="$ROOT/$(python3 -c "import json; print(json.load(open('$DECISION'))['output_fgb'])")"
+  OUT="$ROOT/$(python3 -c "import json; print(json.load(open('$DECISION'))['output_pmtiles'])")"
+fi
 
 mkdir -p "$(dirname "$OUT")" "$(dirname "$LOG")"
 

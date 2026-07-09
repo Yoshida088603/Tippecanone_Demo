@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""QC input GPKG: layer metadata, extent, coordinate unit detection."""
+"""QC all input GPKG files in 05_input_data/."""
 
 from __future__ import annotations
 
@@ -13,9 +13,8 @@ from pathlib import Path
 import pyogrio
 
 ROOT = Path(__file__).resolve().parents[1]
-GPKG = ROOT / "05_input_data" / "13102-0100-2026.gpkg"
+INPUT_DIR = ROOT / "05_input_data"
 OUT = ROOT / "90_output_data" / "qc" / "meta_in.json"
-
 SAMPLE_SIZE = 100
 
 
@@ -42,7 +41,6 @@ def run_ogrinfo_summary(gpkg: Path, layer: str) -> dict:
 
     crs_match = re.search(r'ID\["EPSG",(\d+)\]', text)
     declared_crs = f"EPSG:{crs_match.group(1)}" if crs_match else None
-
     count_match = re.search(r"Feature Count:\s*(\d+)", text)
     feature_count = int(count_match.group(1)) if count_match else None
 
@@ -67,14 +65,7 @@ def coord_system_counts(gpkg: Path, layer: str) -> dict[str, int]:
 
 def sample_coordinates(gpkg: Path, layer: str, limit: int) -> list[tuple[float, float]]:
     result = subprocess.run(
-        [
-            "ogrinfo",
-            "-q",
-            "-al",
-            "-geom=AS_XY",
-            str(gpkg),
-            layer,
-        ],
+        ["ogrinfo", "-q", "-al", "-geom=AS_XY", str(gpkg), layer],
         capture_output=True,
         text=True,
         check=True,
@@ -92,7 +83,6 @@ def sample_coordinates(gpkg: Path, layer: str, limit: int) -> list[tuple[float, 
 
 
 def layer_extent_from_bounds(bounds) -> dict:
-    """Compute layer-wide extent from pyogrio.read_bounds() output."""
     if isinstance(bounds, tuple) and len(bounds) == 2:
         _, arr = bounds
         return {
@@ -117,39 +107,36 @@ def detect_coord_unit(extent: dict | None, samples: list[tuple[float, float]]) -
             (extent["maxx"], extent["maxy"]),
         ]:
             points.append((x, y))
-
     if not points:
         return "metre_suspect"
-
     degree_like = sum(1 for x, y in points if abs(x) <= 180 and abs(y) <= 90)
     if degree_like >= len(points) * 0.8:
         return "degree"
     return "metre_suspect"
 
 
-def main() -> int:
-    if not GPKG.exists():
-        print(f"ERROR: input not found: {GPKG}", file=sys.stderr)
-        return 1
+def ward_code_from_name(filename: str) -> str:
+    return filename.split("-")[0]
 
-    layers = pyogrio.list_layers(GPKG)
+
+def analyze_gpkg(gpkg: Path) -> dict:
+    layers = pyogrio.list_layers(gpkg)
     layer_names = [row[0] for row in layers]
     primary_layer = layer_names[0] if layer_names else None
-
     if not primary_layer:
-        print("ERROR: no layers found in GPKG", file=sys.stderr)
-        return 1
+        raise RuntimeError(f"no layers in {gpkg}")
 
-    info = pyogrio.read_info(GPKG, layer=primary_layer)
-    summary = run_ogrinfo_summary(GPKG, primary_layer)
-    bounds = pyogrio.read_bounds(GPKG, layer=primary_layer)
+    info = pyogrio.read_info(gpkg, layer=primary_layer)
+    summary = run_ogrinfo_summary(gpkg, primary_layer)
+    bounds = pyogrio.read_bounds(gpkg, layer=primary_layer)
     extent = summary.get("extent") or layer_extent_from_bounds(bounds)
-    coord_system_attr = coord_system_counts(GPKG, primary_layer)
-    samples = sample_coordinates(GPKG, primary_layer, SAMPLE_SIZE)
+    coord_system_attr = coord_system_counts(gpkg, primary_layer)
+    samples = sample_coordinates(gpkg, primary_layer, SAMPLE_SIZE)
     coord_unit = detect_coord_unit(extent, samples)
 
-    meta = {
-        "input": str(GPKG.relative_to(ROOT)),
+    return {
+        "input": str(gpkg.relative_to(ROOT)),
+        "ward_code": ward_code_from_name(gpkg.name),
         "layers": layer_names,
         "primary_layer": primary_layer,
         "feature_count": summary["feature_count"] or info.get("features"),
@@ -161,10 +148,42 @@ def main() -> int:
         "sample_coord_count": len(samples),
     }
 
+
+def merge_extents(extents: list[dict]) -> dict:
+    return {
+        "minx": min(e["minx"] for e in extents),
+        "miny": min(e["miny"] for e in extents),
+        "maxx": max(e["maxx"] for e in extents),
+        "maxy": max(e["maxy"] for e in extents),
+    }
+
+
+def main() -> int:
+    gpkg_files = sorted(INPUT_DIR.glob("*.gpkg"))
+    if not gpkg_files:
+        print(f"ERROR: no GPKG files in {INPUT_DIR}", file=sys.stderr)
+        return 1
+
+    files_meta = []
+    for gpkg in gpkg_files:
+        print(f"QC in: {gpkg.name}")
+        files_meta.append(analyze_gpkg(gpkg))
+
+    total_features = sum(int(f["feature_count"] or 0) for f in files_meta)
+    meta = {
+        "input_dir": str(INPUT_DIR.relative_to(ROOT)),
+        "file_count": len(files_meta),
+        "feature_count": total_features,
+        "files": files_meta,
+        "combined_extent": merge_extents([f["extent"] for f in files_meta]),
+        "output_fgb": "90_output_data/fgb/tokyo23.fgb",
+        "output_pmtiles": "90_output_data/pmtiles/tokyo23.pmtiles",
+    }
+
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Wrote {OUT}")
-    print(f"coord_unit={coord_unit}, features={meta['feature_count']}")
+    print(f"files={len(files_meta)}, total_features={total_features}")
     return 0
 
 

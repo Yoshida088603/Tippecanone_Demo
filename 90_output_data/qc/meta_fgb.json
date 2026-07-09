@@ -1,30 +1,32 @@
 {
-  "output": "90_output_data/fgb/13102.fgb",
+  "output": "90_output_data/fgb/tokyo23.fgb",
   "layer": "parcels",
   "crs": "EPSG:4326",
-  "feature_count": 1036,
-  "input_feature_count": 29249,
-  "excluded_count": 28213,
+  "feature_count": 154440,
+  "input_feature_count": 2968919,
+  "excluded_count": 2814479,
+  "file_count": 23,
   "extent": {
-    "minx": 139.767239165,
-    "miny": 35.648984336,
-    "maxx": 139.788842465,
-    "maxy": 35.685438194
+    "minx": 139.569180813,
+    "miny": 35.564878479,
+    "maxx": 139.911137039,
+    "maxy": 35.815088586
   },
   "bbox_center": [
-    139.778041,
-    35.667211
+    139.740159,
+    35.689984
   ],
   "bbox_valid": true,
   "bbox_expected": {
     "lon": [
-      139.74,
-      139.82
+      139.55,
+      139.92
     ],
     "lat": [
-      35.64,
-      35.71
-    ]
+      35.52,
+      35.85
+    ],
+    "label": "Tokyo 23 wards"
   },
   "passed": true,
   "errors": []

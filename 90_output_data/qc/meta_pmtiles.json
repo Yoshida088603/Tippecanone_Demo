@@ -1,6 +1,6 @@
 {
-  "output": "90_output_data/pmtiles/13102.pmtiles",
-  "size_bytes": 211780,
+  "output": "90_output_data/pmtiles/tokyo23.pmtiles",
+  "size_bytes": 11139045,
   "header": {
     "magic": "PMTiles",
     "version": 3,

@@ -1,22 +1,543 @@
 {
-  "input": "05_input_data/13102-0100-2026.gpkg",
-  "layers": [
-    "13102-0100-2026"
+  "input_dir": "05_input_data",
+  "file_count": 23,
+  "feature_count": 2968919,
+  "files": [
+    {
+      "input": "05_input_data/13101-0100-2026.gpkg",
+      "ward_code": "13101",
+      "layers": [
+        "13101-0100-2026"
+      ],
+      "primary_layer": "13101-0100-2026",
+      "feature_count": 21897,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -3941.808,
+        "miny": -5131.395,
+        "maxx": 1591.543,
+        "maxy": 1253.674
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 21661,
+        "公共座標9系": 236
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13102-0100-2026.gpkg",
+      "ward_code": "13102",
+      "layers": [
+        "13102-0100-2026"
+      ],
+      "primary_layer": "13102-0100-2026",
+      "feature_count": 29249,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -6618.569,
+        "miny": -39614.676,
+        "maxx": 203.195,
+        "maxy": 158.11
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 28213,
+        "公共座標9系": 1036
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13103-0104-2026.gpkg",
+      "ward_code": "13103",
+      "layers": [
+        "13103-0104-2026"
+      ],
+      "primary_layer": "13103-0104-2026",
+      "feature_count": 54765,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -1524.94,
+        "miny": -2829.133,
+        "maxx": 1638.519,
+        "maxy": 1527.836
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 49171,
+        "公共座標9系": 5594
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13104-0111-2026.gpkg",
+      "ward_code": "13104",
+      "layers": [
+        "13104-0111-2026"
+      ],
+      "primary_layer": "13104-0111-2026",
+      "feature_count": 94813,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -1782.943,
+        "miny": -2478.138,
+        "maxx": 1329.185,
+        "maxy": 1522.725
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 92786,
+        "公共座標9系": 2027
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13105-0100-2026.gpkg",
+      "ward_code": "13105",
+      "layers": [
+        "13105-0100-2026"
+      ],
+      "primary_layer": "13105-0100-2026",
+      "feature_count": 58558,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -1195.75,
+        "miny": -2136.514,
+        "maxx": 2702.05,
+        "maxy": 2170.928
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 56392,
+        "公共座標9系": 2166
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13106-0105-2026.gpkg",
+      "ward_code": "13106",
+      "layers": [
+        "13106-0105-2026"
+      ],
+      "primary_layer": "13106-0105-2026",
+      "feature_count": 51883,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -453.371,
+        "miny": -673.507,
+        "maxx": 4802.887,
+        "maxy": 6787.151
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 51831,
+        "公共座標9系": 52
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13107-0106-2026.gpkg",
+      "ward_code": "13107",
+      "layers": [
+        "13107-0106-2026"
+      ],
+      "primary_layer": "13107-0106-2026",
+      "feature_count": 71874,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -1732.876,
+        "miny": -30600.282,
+        "maxx": 1325.595,
+        "maxy": 1951.046
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 69534,
+        "公共座標9系": 2340
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13108-0106-2026.gpkg",
+      "ward_code": "13108",
+      "layers": [
+        "13108-0106-2026"
+      ],
+      "primary_layer": "13108-0106-2026",
+      "feature_count": 80413,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -4118.217,
+        "miny": -43205.545,
+        "maxx": 3384.036,
+        "maxy": 36711.221
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 73499,
+        "公共座標9系": 6914
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13109-0107-2026.gpkg",
+      "ward_code": "13109",
+      "layers": [
+        "13109-0107-2026"
+      ],
+      "primary_layer": "13109-0107-2026",
+      "feature_count": 98553,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -45940.416,
+        "miny": -43372.546,
+        "maxx": 13061.895,
+        "maxy": 4853.779
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 95177,
+        "公共座標9系": 3376
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13110-0110-2026.gpkg",
+      "ward_code": "13110",
+      "layers": [
+        "13110-0110-2026"
+      ],
+      "primary_layer": "13110-0110-2026",
+      "feature_count": 82283,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -3303.06,
+        "miny": -2675.097,
+        "maxx": 9366.129,
+        "maxy": 5602.726
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 81667,
+        "公共座標9系": 616
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13111-0108-2026.gpkg",
+      "ward_code": "13111",
+      "layers": [
+        "13111-0108-2026"
+      ],
+      "primary_layer": "13111-0108-2026",
+      "feature_count": 201383,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -5995.835,
+        "miny": -47273.636,
+        "maxx": 6163.952,
+        "maxy": 2078.753
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 200845,
+        "公共座標9系": 538
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13112-0109-2026.gpkg",
+      "ward_code": "13112",
+      "layers": [
+        "13112-0109-2026"
+      ],
+      "primary_layer": "13112-0109-2026",
+      "feature_count": 316521,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -21049.784,
+        "miny": -42602.322,
+        "maxx": 2410.21,
+        "maxy": 2760.007
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 303299,
+        "公共座標9系": 13222
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13113-0110-2026.gpkg",
+      "ward_code": "13113",
+      "layers": [
+        "13113-0110-2026"
+      ],
+      "primary_layer": "13113-0110-2026",
+      "feature_count": 70075,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -12510.822,
+        "miny": -38018.53,
+        "maxx": 1901.852,
+        "maxy": 1177.774
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 61321,
+        "公共座標9系": 8754
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13114-0112-2026.gpkg",
+      "ward_code": "13114",
+      "layers": [
+        "13114-0112-2026"
+      ],
+      "primary_layer": "13114-0112-2026",
+      "feature_count": 112324,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -2454.733,
+        "miny": -1420.697,
+        "maxx": 2210.057,
+        "maxy": 1435.717
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 110724,
+        "公共座標9系": 1600
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13115-0113-2026.gpkg",
+      "ward_code": "13115",
+      "layers": [
+        "13115-0113-2026"
+      ],
+      "primary_layer": "13115-0113-2026",
+      "feature_count": 217882,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -1678.666,
+        "miny": -1779.186,
+        "maxx": 2890.028,
+        "maxy": 1971.071
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 217783,
+        "公共座標9系": 99
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13116-0133-2026.gpkg",
+      "ward_code": "13116",
+      "layers": [
+        "13116-0133-2026"
+      ],
+      "primary_layer": "13116-0133-2026",
+      "feature_count": 85156,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -10636.344,
+        "miny": -31110.413,
+        "maxx": 7097.066,
+        "maxy": 2101.69
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 77667,
+        "公共座標9系": 7489
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13117-0115-2026.gpkg",
+      "ward_code": "13117",
+      "layers": [
+        "13117-0115-2026"
+      ],
+      "primary_layer": "13117-0115-2026",
+      "feature_count": 99190,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -1500.936,
+        "miny": -1932.86,
+        "maxx": 3398.834,
+        "maxy": 1559.738
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 93550,
+        "公共座標9系": 5640
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13118-0115-2026.gpkg",
+      "ward_code": "13118",
+      "layers": [
+        "13118-0115-2026"
+      ],
+      "primary_layer": "13118-0115-2026",
+      "feature_count": 65237,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -4321.952,
+        "miny": -1392.965,
+        "maxx": 3575.008,
+        "maxy": 3190.321
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 65237
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13119-0114-2026.gpkg",
+      "ward_code": "13119",
+      "layers": [
+        "13119-0114-2026"
+      ],
+      "primary_layer": "13119-0114-2026",
+      "feature_count": 153808,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -3028.113,
+        "miny": -1417.345,
+        "maxx": 2337.418,
+        "maxy": 1223.415
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 143647,
+        "公共座標9系": 10161
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13120-0116-2026.gpkg",
+      "ward_code": "13120",
+      "layers": [
+        "13120-0116-2026"
+      ],
+      "primary_layer": "13120-0116-2026",
+      "feature_count": 310090,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -2339.862,
+        "miny": -2128.871,
+        "maxx": 1486.074,
+        "maxy": 1499.911
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 307117,
+        "公共座標9系": 2973
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13121-0118-2026.gpkg",
+      "ward_code": "13121",
+      "layers": [
+        "13121-0118-2026"
+      ],
+      "primary_layer": "13121-0118-2026",
+      "feature_count": 265980,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -2499.099,
+        "miny": -2855.133,
+        "maxx": 7203.717,
+        "maxy": 4930.553
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 249321,
+        "公共座標9系": 16659
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13122-0118-2026.gpkg",
+      "ward_code": "13122",
+      "layers": [
+        "13122-0118-2026"
+      ],
+      "primary_layer": "13122-0118-2026",
+      "feature_count": 192682,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -5748.856,
+        "miny": -31183.935,
+        "maxx": 10150.662,
+        "maxy": 7855.1
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 150135,
+        "公共座標9系": 42547
+      },
+      "sample_coord_count": 0
+    },
+    {
+      "input": "05_input_data/13123-0117-2026.gpkg",
+      "ward_code": "13123",
+      "layers": [
+        "13123-0117-2026"
+      ],
+      "primary_layer": "13123-0117-2026",
+      "feature_count": 234303,
+      "declared_crs": "EPSG:4326",
+      "geometry_type": "Multi Polygon",
+      "extent": {
+        "minx": -1542.72,
+        "miny": -33054.241,
+        "maxx": 5457.002,
+        "maxy": 1826.396
+      },
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 213902,
+        "公共座標9系": 20401
+      },
+      "sample_coord_count": 0
+    }
   ],
-  "primary_layer": "13102-0100-2026",
-  "feature_count": 29249,
-  "declared_crs": "EPSG:4326",
-  "geometry_type": "Multi Polygon",
-  "extent": {
-    "minx": -6618.569,
-    "miny": -39614.676,
-    "maxx": 203.195,
-    "maxy": 158.11
+  "combined_extent": {
+    "minx": -45940.416,
+    "miny": -47273.636,
+    "maxx": 13061.895,
+    "maxy": 36711.221
   },
-  "coord_unit": "metre_suspect",
-  "coord_system_attr": {
-    "任意座標系": 28213,
-    "公共座標9系": 1036
-  },
-  "sample_coord_count": 0
+  "output_fgb": "90_output_data/fgb/tokyo23.fgb",
+  "output_pmtiles": "90_output_data/pmtiles/tokyo23.pmtiles"
 }

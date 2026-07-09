@@ -1,25 +1,624 @@
 {
-  "input_layer": "13102-0100-2026",
-  "declared_crs": "EPSG:4326",
-  "coord_unit": "metre_suspect",
-  "coord_system_attr": {
-    "任意座標系": 28213,
-    "公共座標9系": 1036
-  },
-  "strategy": "filter_9系_only",
-  "source_srs": null,
-  "target_srs": "EPSG:4326",
-  "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
-  "expected_output_count": 1036,
-  "excluded_count": 28213,
-  "arbitrary_count": 28213,
-  "public_9_count": 1036,
-  "subset_extent": {
-    "minx": 139.767239,
-    "miny": 35.648984,
-    "maxx": 139.788842,
-    "maxy": 35.685438
-  },
-  "rationale": "Mixed coordinate systems detected; public 9系 subset is already in degree coordinates — extract and keep EPSG:4326 without forced plane-rectangular reprojection.",
-  "output_layer": "parcels"
+  "file_count": 23,
+  "output_fgb": "90_output_data/fgb/tokyo23.fgb",
+  "output_pmtiles": "90_output_data/pmtiles/tokyo23.pmtiles",
+  "total_expected_output": 154440,
+  "total_excluded": 2814479,
+  "files": [
+    {
+      "input": "05_input_data/13101-0100-2026.gpkg",
+      "ward_code": "13101",
+      "input_layer": "13101-0100-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 21661,
+        "公共座標9系": 236
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 236,
+      "excluded_count": 21661,
+      "arbitrary_count": 21661,
+      "public_9_count": 236,
+      "subset_extent": {
+        "minx": 139.743407,
+        "miny": 35.67305,
+        "maxx": 139.775414,
+        "maxy": 35.702416
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13102-0100-2026.gpkg",
+      "ward_code": "13102",
+      "input_layer": "13102-0100-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 28213,
+        "公共座標9系": 1036
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 1036,
+      "excluded_count": 28213,
+      "arbitrary_count": 28213,
+      "public_9_count": 1036,
+      "subset_extent": {
+        "minx": 139.767239,
+        "miny": 35.648984,
+        "maxx": 139.788842,
+        "maxy": 35.685438
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13103-0104-2026.gpkg",
+      "ward_code": "13103",
+      "input_layer": "13103-0104-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 49171,
+        "公共座標9系": 5594
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 5594,
+      "excluded_count": 49171,
+      "arbitrary_count": 49171,
+      "public_9_count": 5594,
+      "subset_extent": {
+        "minx": 139.721746,
+        "miny": 35.62356,
+        "maxx": 139.781982,
+        "maxy": 35.674646
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13104-0111-2026.gpkg",
+      "ward_code": "13104",
+      "input_layer": "13104-0111-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 92786,
+        "公共座標9系": 2027
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 2027,
+      "excluded_count": 92786,
+      "arbitrary_count": 92786,
+      "public_9_count": 2027,
+      "subset_extent": {
+        "minx": 139.687502,
+        "miny": 35.674466,
+        "maxx": 139.729875,
+        "maxy": 35.714641
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13105-0100-2026.gpkg",
+      "ward_code": "13105",
+      "input_layer": "13105-0100-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 56392,
+        "公共座標9系": 2166
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 2166,
+      "excluded_count": 56392,
+      "arbitrary_count": 56392,
+      "public_9_count": 2166,
+      "subset_extent": {
+        "minx": 139.729524,
+        "miny": 35.713981,
+        "maxx": 139.744407,
+        "maxy": 35.731949
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13106-0105-2026.gpkg",
+      "ward_code": "13106",
+      "input_layer": "13106-0105-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 51831,
+        "公共座標9系": 52
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 52,
+      "excluded_count": 51831,
+      "arbitrary_count": 51831,
+      "public_9_count": 52,
+      "subset_extent": {
+        "minx": 139.772754,
+        "miny": 35.701602,
+        "maxx": 139.782293,
+        "maxy": 35.723853
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13107-0106-2026.gpkg",
+      "ward_code": "13107",
+      "input_layer": "13107-0106-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 69534,
+        "公共座標9系": 2340
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 2340,
+      "excluded_count": 69534,
+      "arbitrary_count": 69534,
+      "public_9_count": 2340,
+      "subset_extent": {
+        "minx": 139.808601,
+        "miny": 35.693495,
+        "maxx": 139.820284,
+        "maxy": 35.722227
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13108-0106-2026.gpkg",
+      "ward_code": "13108",
+      "input_layer": "13108-0106-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 73499,
+        "公共座標9系": 6914
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 6914,
+      "excluded_count": 73499,
+      "arbitrary_count": 73499,
+      "public_9_count": 6914,
+      "subset_extent": {
+        "minx": 139.776673,
+        "miny": 35.612518,
+        "maxx": 139.840103,
+        "maxy": 35.684323
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13109-0107-2026.gpkg",
+      "ward_code": "13109",
+      "input_layer": "13109-0107-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 95177,
+        "公共座標9系": 3376
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 3376,
+      "excluded_count": 95177,
+      "arbitrary_count": 95177,
+      "public_9_count": 3376,
+      "subset_extent": {
+        "minx": 139.702454,
+        "miny": 35.584487,
+        "maxx": 139.773633,
+        "maxy": 35.628776
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13110-0110-2026.gpkg",
+      "ward_code": "13110",
+      "input_layer": "13110-0110-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 81667,
+        "公共座標9系": 616
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 616,
+      "excluded_count": 81667,
+      "arbitrary_count": 81667,
+      "public_9_count": 616,
+      "subset_extent": {
+        "minx": 139.685266,
+        "miny": 35.632459,
+        "maxx": 139.697687,
+        "maxy": 35.647897
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13111-0108-2026.gpkg",
+      "ward_code": "13111",
+      "input_layer": "13111-0108-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 200845,
+        "公共座標9系": 538
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 538,
+      "excluded_count": 200845,
+      "arbitrary_count": 200845,
+      "public_9_count": 538,
+      "subset_extent": {
+        "minx": 139.716924,
+        "miny": 35.564878,
+        "maxx": 139.783007,
+        "maxy": 35.594974
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13112-0109-2026.gpkg",
+      "ward_code": "13112",
+      "input_layer": "13112-0109-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 303299,
+        "公共座標9系": 13222
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 13222,
+      "excluded_count": 303299,
+      "arbitrary_count": 303299,
+      "public_9_count": 13222,
+      "subset_extent": {
+        "minx": 139.58718,
+        "miny": 35.608347,
+        "maxx": 139.672613,
+        "maxy": 35.677736
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13113-0110-2026.gpkg",
+      "ward_code": "13113",
+      "input_layer": "13113-0110-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 61321,
+        "公共座標9系": 8754
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 8754,
+      "excluded_count": 61321,
+      "arbitrary_count": 61321,
+      "public_9_count": 8754,
+      "subset_extent": {
+        "minx": 139.694837,
+        "miny": 35.648447,
+        "maxx": 139.715044,
+        "maxy": 35.684643
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13114-0112-2026.gpkg",
+      "ward_code": "13114",
+      "input_layer": "13114-0112-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 110724,
+        "公共座標9系": 1600
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 1600,
+      "excluded_count": 110724,
+      "arbitrary_count": 110724,
+      "public_9_count": 1600,
+      "subset_extent": {
+        "minx": 139.647498,
+        "miny": 35.688865,
+        "maxx": 139.675622,
+        "maxy": 35.729305
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13115-0113-2026.gpkg",
+      "ward_code": "13115",
+      "input_layer": "13115-0113-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 217783,
+        "公共座標9系": 99
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 99,
+      "excluded_count": 217783,
+      "arbitrary_count": 217783,
+      "public_9_count": 99,
+      "subset_extent": {
+        "minx": 139.622036,
+        "miny": 35.66963,
+        "maxx": 139.639891,
+        "maxy": 35.682264
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13116-0133-2026.gpkg",
+      "ward_code": "13116",
+      "input_layer": "13116-0133-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 77667,
+        "公共座標9系": 7489
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 7489,
+      "excluded_count": 77667,
+      "arbitrary_count": 77667,
+      "public_9_count": 7489,
+      "subset_extent": {
+        "minx": 139.705293,
+        "miny": 35.713458,
+        "maxx": 139.752611,
+        "maxy": 35.739607
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13117-0115-2026.gpkg",
+      "ward_code": "13117",
+      "input_layer": "13117-0115-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 93550,
+        "公共座標9系": 5640
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 5640,
+      "excluded_count": 93550,
+      "arbitrary_count": 93550,
+      "public_9_count": 5640,
+      "subset_extent": {
+        "minx": 139.712557,
+        "miny": 35.733787,
+        "maxx": 139.760905,
+        "maxy": 35.782102
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13118-0115-2026.gpkg",
+      "ward_code": "13118",
+      "input_layer": "13118-0115-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 65237
+      },
+      "strategy": "skip_arbitrary_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": null,
+      "expected_output_count": 0,
+      "excluded_count": 65237,
+      "arbitrary_count": 65237,
+      "public_9_count": 0,
+      "subset_extent": null,
+      "rationale": "Only arbitrary coordinates present; skip per POC (no public 9系 features).",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13119-0114-2026.gpkg",
+      "ward_code": "13119",
+      "input_layer": "13119-0114-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 143647,
+        "公共座標9系": 10161
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 10161,
+      "excluded_count": 143647,
+      "arbitrary_count": 143647,
+      "public_9_count": 10161,
+      "subset_extent": {
+        "minx": 139.638785,
+        "miny": 35.745254,
+        "maxx": 139.72133,
+        "maxy": 35.796129
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13120-0116-2026.gpkg",
+      "ward_code": "13120",
+      "input_layer": "13120-0116-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 307117,
+        "公共座標9系": 2973
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 2973,
+      "excluded_count": 307117,
+      "arbitrary_count": 307117,
+      "public_9_count": 2973,
+      "subset_extent": {
+        "minx": 139.569181,
+        "miny": 35.740066,
+        "maxx": 139.654319,
+        "maxy": 35.771033
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13121-0118-2026.gpkg",
+      "ward_code": "13121",
+      "input_layer": "13121-0118-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 249321,
+        "公共座標9系": 16659
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 16659,
+      "excluded_count": 249321,
+      "arbitrary_count": 249321,
+      "public_9_count": 16659,
+      "subset_extent": {
+        "minx": 139.760643,
+        "miny": 35.741429,
+        "maxx": 139.850064,
+        "maxy": 35.815089
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13122-0118-2026.gpkg",
+      "ward_code": "13122",
+      "input_layer": "13122-0118-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 150135,
+        "公共座標9系": 42547
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 42547,
+      "excluded_count": 150135,
+      "arbitrary_count": 150135,
+      "public_9_count": 42547,
+      "subset_extent": {
+        "minx": 139.823034,
+        "miny": 35.717329,
+        "maxx": 139.881681,
+        "maxy": 35.795273
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    },
+    {
+      "input": "05_input_data/13123-0117-2026.gpkg",
+      "ward_code": "13123",
+      "input_layer": "13123-0117-2026",
+      "declared_crs": "EPSG:4326",
+      "coord_unit": "metre_suspect",
+      "coord_system_attr": {
+        "任意座標系": 213902,
+        "公共座標9系": 20401
+      },
+      "strategy": "filter_9系_only",
+      "source_srs": null,
+      "target_srs": "EPSG:4326",
+      "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+      "expected_output_count": 20401,
+      "excluded_count": 213902,
+      "arbitrary_count": 213902,
+      "public_9_count": 20401,
+      "subset_extent": {
+        "minx": 139.839087,
+        "miny": 35.633154,
+        "maxx": 139.911137,
+        "maxy": 35.735608
+      },
+      "rationale": "Mixed coordinate systems; public 9系 subset already in degrees.",
+      "output_layer": "parcels"
+    }
+  ]
 }
