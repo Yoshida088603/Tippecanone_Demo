@@ -1,0 +1,22 @@
+{
+  "input": "05_input_data/13102-0100-2026.gpkg",
+  "layers": [
+    "13102-0100-2026"
+  ],
+  "primary_layer": "13102-0100-2026",
+  "feature_count": 29249,
+  "declared_crs": "EPSG:4326",
+  "geometry_type": "Multi Polygon",
+  "extent": {
+    "minx": -6618.569,
+    "miny": -39614.676,
+    "maxx": 203.195,
+    "maxy": 158.11
+  },
+  "coord_unit": "metre_suspect",
+  "coord_system_attr": {
+    "任意座標系": 28213,
+    "公共座標9系": 1036
+  },
+  "sample_coord_count": 0
+}

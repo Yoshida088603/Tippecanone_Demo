@@ -1,0 +1,31 @@
+{
+  "output": "90_output_data/fgb/13102.fgb",
+  "layer": "parcels",
+  "crs": "EPSG:4326",
+  "feature_count": 1036,
+  "input_feature_count": 29249,
+  "excluded_count": 28213,
+  "extent": {
+    "minx": 139.767239165,
+    "miny": 35.648984336,
+    "maxx": 139.788842465,
+    "maxy": 35.685438194
+  },
+  "bbox_center": [
+    139.778041,
+    35.667211
+  ],
+  "bbox_valid": true,
+  "bbox_expected": {
+    "lon": [
+      139.74,
+      139.82
+    ],
+    "lat": [
+      35.64,
+      35.71
+    ]
+  },
+  "passed": true,
+  "errors": []
+}

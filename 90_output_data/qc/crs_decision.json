@@ -1,0 +1,25 @@
+{
+  "input_layer": "13102-0100-2026",
+  "declared_crs": "EPSG:4326",
+  "coord_unit": "metre_suspect",
+  "coord_system_attr": {
+    "任意座標系": 28213,
+    "公共座標9系": 1036
+  },
+  "strategy": "filter_9系_only",
+  "source_srs": null,
+  "target_srs": "EPSG:4326",
+  "sql_where": "座標系 LIKE '%公共%9%' OR 座標系 LIKE '%公共座標9系%'",
+  "expected_output_count": 1036,
+  "excluded_count": 28213,
+  "arbitrary_count": 28213,
+  "public_9_count": 1036,
+  "subset_extent": {
+    "minx": 139.767239,
+    "miny": 35.648984,
+    "maxx": 139.788842,
+    "maxy": 35.685438
+  },
+  "rationale": "Mixed coordinate systems detected; public 9系 subset is already in degree coordinates — extract and keep EPSG:4326 without forced plane-rectangular reprojection.",
+  "output_layer": "parcels"
+}
