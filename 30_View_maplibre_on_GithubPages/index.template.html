@@ -395,6 +395,7 @@
         localIdeographFontFamily: "'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif",
         style: {
           version: 8,
+          glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
           sources: {
             basemap: {
               type: 'raster',
@@ -460,6 +461,7 @@
               minzoom: LABEL_MIN_ZOOM,
               layout: {
                 'text-field': ['coalesce', ['get', '地番'], ''],
+                'text-font': ['Noto Sans Regular'],
                 'text-size': [
                   'interpolate', ['linear'], ['zoom'],
                   15, 10,
