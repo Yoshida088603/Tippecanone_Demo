@@ -2,15 +2,69 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>東京23区 土地境界 — Tippecanoe POC</title>
   <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
   <style>
-    html, body, #map { margin: 0; padding: 0; width: 100%; height: 100%; }
+    :root {
+      --map-height: 100vh;
+      --map-height: 100dvh;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      height: var(--map-height);
+      overflow: hidden;
+      overscroll-behavior: none;
+    }
+    body {
+      position: relative;
+      background: #e8e8e8;
+    }
+    #map {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      height: var(--map-height);
+      touch-action: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    #error-banner {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      right: 12px;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(255, 235, 235, 0.96);
+      color: #8b0000;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font: 13px/1.5 system-ui, sans-serif;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      word-break: break-word;
+    }
+    #error-banner.visible { display: block; }
+    #loading-banner {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      background: #f4f4f4;
+      font: 14px system-ui, sans-serif;
+      color: #555;
+      pointer-events: none;
+    }
+    #loading-banner.hidden { display: none; }
     .map-overlay {
       position: absolute;
-      top: 12px;
-      left: 12px;
+      top: max(12px, env(safe-area-inset-top));
+      left: max(12px, env(safe-area-inset-left));
       z-index: 2;
       background: rgba(255, 255, 255, 0.92);
       padding: 8px 12px;
@@ -21,16 +75,18 @@
     }
     .stats-panel {
       position: absolute;
-      bottom: 12px;
-      left: 12px;
+      bottom: max(12px, env(safe-area-inset-bottom));
+      left: max(12px, env(safe-area-inset-left));
       z-index: 2;
       background: rgba(255, 255, 255, 0.94);
       padding: 10px 12px;
       border-radius: 6px;
       font: 12px/1.5 ui-monospace, 'Cascadia Code', monospace;
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-      min-width: 240px;
-      max-width: 320px;
+      min-width: 200px;
+      max-width: min(320px, calc(100vw - 24px));
+      max-height: 40dvh;
+      overflow: auto;
     }
     .stats-panel h3 {
       margin: 0 0 8px;
@@ -108,6 +164,8 @@
   </style>
 </head>
 <body>
+  <div id="loading-banner">地図を読み込み中…</div>
+  <div id="error-banner" role="alert"></div>
   <div id="map"></div>
   <div class="map-overlay">東京23区 土地境界 / PMTiles POC</div>
 
@@ -159,100 +217,27 @@
       '座標系', '精度区分', '地図名', '市区町村コード'
     ];
 
-    const protocol = new pmtiles.Protocol();
-    maplibregl.addProtocol('pmtiles', protocol.tile);
-
-    const map = new maplibregl.Map({
-      container: 'map',
-      localIdeographFontFamily: "'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif",
-      style: {
-        version: 8,
-        sources: {
-          osm: {
-            type: 'raster',
-            tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
-            tileSize: 256,
-            attribution: '&copy; OpenStreetMap contributors'
-          },
-          parcels: {
-            type: 'vector',
-            url: 'pmtiles://data/' + PMTILES_FILE,
-            attribution: '土地境界（東京23区）'
-          }
-        },
-        layers: [
-          {
-            id: 'osm',
-            type: 'raster',
-            source: 'osm'
-          },
-          {
-            id: PARCEL_LAYERS.fill,
-            type: 'fill',
-            source: 'parcels',
-            'source-layer': 'parcels',
-            paint: {
-              'fill-color': '#e85d04',
-              'fill-opacity': [
-                'case',
-                ['boolean', ['feature-state', 'selected'], false],
-                0.55,
-                0.35
-              ]
-            }
-          },
-          {
-            id: PARCEL_LAYERS.highlight,
-            type: 'line',
-            source: 'parcels',
-            'source-layer': 'parcels',
-            paint: {
-              'line-color': '#0057b8',
-              'line-width': 3
-            },
-            filter: ['==', ['id'], -1]
-          },
-          {
-            id: PARCEL_LAYERS.line,
-            type: 'line',
-            source: 'parcels',
-            'source-layer': 'parcels',
-            paint: {
-              'line-color': '#9d0208',
-              'line-width': 1
-            }
-          },
-          {
-            id: PARCEL_LAYERS.label,
-            type: 'symbol',
-            source: 'parcels',
-            'source-layer': 'parcels',
-            minzoom: LABEL_MIN_ZOOM,
-            layout: {
-              'text-field': ['coalesce', ['get', '地番'], ''],
-              'text-size': [
-                'interpolate', ['linear'], ['zoom'],
-                15, 10,
-                18, 13
-              ],
-              'text-anchor': 'center',
-              'text-allow-overlap': false,
-              'text-ignore-placement': false,
-              'text-padding': 2
-            },
-            paint: {
-              'text-color': '#1d3557',
-              'text-halo-color': '#ffffff',
-              'text-halo-width': 1.5
-            }
-          }
-        ]
-      },
-      center: [CENTER_LON, CENTER_LAT],
-      zoom: INITIAL_ZOOM
-    });
-
+    let map = null;
     let selectedFeatureId = null;
+
+    function setViewportHeight() {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+      if (!CSS.supports('height', '100dvh')) {
+        document.documentElement.style.setProperty('--map-height', `calc(var(--vh, ${vh}px) * 100)`);
+      }
+    }
+
+    function showError(message) {
+      const banner = document.getElementById('error-banner');
+      banner.textContent = message;
+      banner.classList.add('visible');
+      document.getElementById('loading-banner').classList.add('hidden');
+    }
+
+    function hideLoading() {
+      document.getElementById('loading-banner').classList.add('hidden');
+    }
 
     function setText(id, value) {
       const el = document.getElementById(id);
@@ -264,10 +249,12 @@
     }
 
     function countRendered(layerId) {
+      if (!map) return 0;
       return map.queryRenderedFeatures({ layers: [layerId] }).length;
     }
 
     function updateStats() {
+      if (!map) return;
       const zoom = map.getZoom();
       const tileZ = Math.floor(zoom);
       const visiblePolygons = countRendered(PARCEL_LAYERS.fill);
@@ -333,12 +320,11 @@
     }
 
     function clearSelection() {
-      if (selectedFeatureId != null) {
-        map.setFeatureState(
-          { source: 'parcels', sourceLayer: 'parcels', id: selectedFeatureId },
-          { selected: false }
-        );
-      }
+      if (!map || selectedFeatureId == null) return;
+      map.setFeatureState(
+        { source: 'parcels', sourceLayer: 'parcels', id: selectedFeatureId },
+        { selected: false }
+      );
       selectedFeatureId = null;
       map.setFilter(PARCEL_LAYERS.highlight, ['==', ['id'], -1]);
       setText('stat-selected', 'なし');
@@ -369,33 +355,192 @@
       selectFeature(features[0]);
     }
 
-    map.addControl(new maplibregl.NavigationControl(), 'top-right');
+    function scheduleResize() {
+      if (!map) return;
+      requestAnimationFrame(() => map.resize());
+    }
 
-    map.on('load', () => {
-      setText('stat-total-polygons', String(TOTAL_FEATURES));
-      updateStats();
+    function initMap() {
+      if (typeof maplibregl === 'undefined') {
+        showError('MapLibre GL の読み込みに失敗しました。ネットワーク接続を確認してください。');
+        return;
+      }
+      if (typeof pmtiles === 'undefined') {
+        showError('PMTiles ライブラリの読み込みに失敗しました。');
+        return;
+      }
+
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) {
+        showError('このブラウザは WebGL に対応していないため地図を表示できません。');
+        return;
+      }
+
+      const mapContainer = document.getElementById('map');
+      if (mapContainer.clientWidth === 0 || mapContainer.clientHeight === 0) {
+        showError('地図コンテナのサイズが 0 です。ページを再読み込みしてください。');
+        return;
+      }
+
+      const pmtilesUrl = new URL('data/' + PMTILES_FILE, window.location.href).href;
+      const protocol = new pmtiles.Protocol();
+      maplibregl.addProtocol('pmtiles', protocol.tile);
+
+      map = new maplibregl.Map({
+        container: 'map',
+        antialias: true,
+        failIfMajorPerformanceCaveat: false,
+        preserveDrawingBuffer: true,
+        localIdeographFontFamily: "'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif",
+        style: {
+          version: 8,
+          sources: {
+            basemap: {
+              type: 'raster',
+              tiles: [
+                'https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}@2x.png'
+              ],
+              tileSize: 256,
+              attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+            },
+            parcels: {
+              type: 'vector',
+              url: 'pmtiles://' + pmtilesUrl,
+              attribution: '土地境界（東京23区）'
+            }
+          },
+          layers: [
+            {
+              id: 'basemap',
+              type: 'raster',
+              source: 'basemap'
+            },
+            {
+              id: PARCEL_LAYERS.fill,
+              type: 'fill',
+              source: 'parcels',
+              'source-layer': 'parcels',
+              paint: {
+                'fill-color': '#e85d04',
+                'fill-opacity': [
+                  'case',
+                  ['boolean', ['feature-state', 'selected'], false],
+                  0.55,
+                  0.35
+                ]
+              }
+            },
+            {
+              id: PARCEL_LAYERS.highlight,
+              type: 'line',
+              source: 'parcels',
+              'source-layer': 'parcels',
+              paint: {
+                'line-color': '#0057b8',
+                'line-width': 3
+              },
+              filter: ['==', ['id'], -1]
+            },
+            {
+              id: PARCEL_LAYERS.line,
+              type: 'line',
+              source: 'parcels',
+              'source-layer': 'parcels',
+              paint: {
+                'line-color': '#9d0208',
+                'line-width': 1
+              }
+            },
+            {
+              id: PARCEL_LAYERS.label,
+              type: 'symbol',
+              source: 'parcels',
+              'source-layer': 'parcels',
+              minzoom: LABEL_MIN_ZOOM,
+              layout: {
+                'text-field': ['coalesce', ['get', '地番'], ''],
+                'text-size': [
+                  'interpolate', ['linear'], ['zoom'],
+                  15, 10,
+                  18, 13
+                ],
+                'text-anchor': 'center',
+                'text-allow-overlap': false,
+                'text-ignore-placement': false,
+                'text-padding': 2
+              },
+              paint: {
+                'text-color': '#1d3557',
+                'text-halo-color': '#ffffff',
+                'text-halo-width': 1.5
+              }
+            }
+          ]
+        },
+        center: [CENTER_LON, CENTER_LAT],
+        zoom: INITIAL_ZOOM
+      });
+
+      map.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+      map.on('load', () => {
+        hideLoading();
+        scheduleResize();
+        setText('stat-total-polygons', String(TOTAL_FEATURES));
+        updateStats();
+      });
+
+      map.on('error', (e) => {
+        const msg = e?.error?.message || String(e.error || e);
+        showError('地図エラー: ' + msg);
+      });
+
+      map.on('moveend', updateStats);
+      map.on('zoomend', updateStats);
+      map.on('sourcedata', (e) => {
+        if (e.sourceId === 'parcels' && e.isSourceLoaded) updateStats();
+      });
+
+      map.on('click', onParcelClick);
+
+      map.on('mouseenter', PARCEL_LAYERS.fill, () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+      map.on('mouseleave', PARCEL_LAYERS.fill, () => {
+        map.getCanvas().style.cursor = '';
+      });
+
+      document.getElementById('attr-close').addEventListener('click', () => {
+        clearSelection();
+        hideAttributePanel();
+        updateStats();
+      });
+    }
+
+    window.addEventListener('error', (event) => {
+      showError('スクリプトエラー: ' + (event.message || 'unknown'));
     });
 
-    map.on('moveend', updateStats);
-    map.on('zoomend', updateStats);
-    map.on('sourcedata', (e) => {
-      if (e.sourceId === 'parcels' && e.isSourceLoaded) updateStats();
+    setViewportHeight();
+    window.addEventListener('resize', () => {
+      setViewportHeight();
+      scheduleResize();
+    });
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => {
+        setViewportHeight();
+        scheduleResize();
+      }, 250);
     });
 
-    map.on('click', onParcelClick);
-
-    map.on('mouseenter', PARCEL_LAYERS.fill, () => {
-      map.getCanvas().style.cursor = 'pointer';
-    });
-    map.on('mouseleave', PARCEL_LAYERS.fill, () => {
-      map.getCanvas().style.cursor = '';
-    });
-
-    document.getElementById('attr-close').addEventListener('click', () => {
-      clearSelection();
-      hideAttributePanel();
-      updateStats();
-    });
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        requestAnimationFrame(initMap);
+      });
+    } else {
+      requestAnimationFrame(initMap);
+    }
   </script>
 </body>
 </html>
