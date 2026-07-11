@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "xapi": {
+      "url": "https://api.x.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${env:X_BEARER_TOKEN}"
+      }
+    },
+    "x-docs": {
+      "url": "https://docs.x.com/mcp"
+    }
+  }
+}
